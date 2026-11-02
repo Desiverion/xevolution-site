@@ -1,0 +1,16 @@
+.thanks__order {
+  margin: 1.25rem 0 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--t-ink-faint);
+}
+
+.thanks__order span {
+  display: inline-block;
+  margin-left: 0.4rem;
+  font-family: var(--t-mono);
+  letter-spacing: 0;
+  text-transform: none;
+  word-break: break-all;
+}
