@@ -1,13 +1,7 @@
-/* thanks.css — post-payment page.
- *
- * TOKENS: every value below is a FALLBACK behind var(--token, fallback).
- * site.css is loaded first, so if the storefront defines the same custom
- * properties, the storefront wins and this file adapts automatically.
- * If the storefront uses different token names, change ONLY the var() names
- * in the "Token bridge" block — not the fallback values.
+/* thanks.css — post-payment page. PREVIEW COPY.
+ * Token bridge: reads storefront custom properties with fallbacks.
  */
 
-/* --- Token bridge ------------------------------------------------------- */
 .thanks {
   --t-ink:       var(--ink,        #12141a);
   --t-ink-soft:  var(--ink-soft,   #4a4f5a);
@@ -26,7 +20,6 @@
   --t-mono:      var(--font-mono,  ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
 }
 
-/* --- Page --------------------------------------------------------------- */
 .thanks {
   margin: 0;
   background: var(--t-paper);
@@ -96,7 +89,6 @@
   max-width: 34rem;
 }
 
-/* --- Panel -------------------------------------------------------------- */
 .thanks__panel {
   background: var(--t-card);
   border: 1px solid var(--t-line);
@@ -123,9 +115,18 @@
 
 .thanks__order {
   margin: 1.25rem 0 0;
-  font-family: var(--t-mono);
-  font-size: 0.8rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--t-ink-faint);
+}
+
+.thanks__order span {
+  display: inline-block;
+  margin-left: 0.4rem;
+  font-family: var(--t-mono);
+  letter-spacing: 0;
+  text-transform: none;
   word-break: break-all;
 }
 
@@ -174,7 +175,6 @@
 .thanks__badge--warn { background: #fbf1e2; color: var(--t-warn); }
 .thanks__badge--bad  { background: #fbeaea; color: var(--t-bad); }
 
-/* --- Proof slot (Architect-authored only) ------------------------------- */
 .thanks__proof {
   margin: 2rem 0 0;
   padding: 1.25rem 1.5rem;
@@ -193,7 +193,6 @@
   color: var(--t-ink-faint);
 }
 
-/* --- Fine print / footer ------------------------------------------------ */
 .thanks__fine {
   margin: 2rem 0 0;
   font-size: 0.85rem;
@@ -221,7 +220,6 @@
 
 .thanks__foot a:hover { color: var(--t-accent); }
 
-/* --- Spinner (verifying state only) ------------------------------------- */
 .thanks__spin {
   display: inline-block;
   width: 0.9rem;
