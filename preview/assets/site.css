@@ -1,0 +1,56 @@
+/* site.css — storefront tokens (Xevolution). PREVIEW COPY.
+ *
+ * NOTE ON PROVENANCE: this is a RECONSTRUCTION used only so the preview page
+ * renders standalone. The real storefront stylesheet lives at
+ * offers/497-vault/site/assets/site.css on the agent workspace and could not
+ * be read from this delegated run, and no deployed copy was reachable.
+ * The token NAMES and fallback values here are assumed, not observed.
+ *
+ * thanks.css reads these custom properties through var(--token, fallback), so
+ * dropping the real storefront stylesheet in its place keeps the thanks page
+ * consistent automatically, provided the real sheet defines the same names.
+ * If it defines different names, edit ONLY the "Token bridge" block at the
+ * top of thanks.css.
+ *
+ * DO NOT ship this file over the real one. Replace it.
+ */
+
+:root {
+  --ink:        #12141a;
+  --ink-soft:   #4a4f5a;
+  --ink-faint:  #7b818c;
+  --paper:      #faf8f4;
+  --paper-2:    #ffffff;
+  --accent:     #e4572e;
+  --accent-ink: #ffffff;
+  --line:       #e3e0d8;
+  --ok:         #1f7a4d;
+  --warn:       #a8661a;
+  --bad:        #a3242b;
+  --radius:     10px;
+  --max-w:      44rem;
+  --font-sans:  system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono:  ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent); }
+
+.wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 3rem 1.25rem;
+}
+
+h1 { font-size: clamp(1.9rem, 5vw, 2.7rem); line-height: 1.12; letter-spacing: -0.02em; }
