@@ -295,7 +295,7 @@ function html410(message) {
   );
 }
 
-async function handleWebhook(env, request) {
+async function handleWebhook(env, request, ctx) {
   const sig = request.headers.get('stripe-signature');
   const raw = await request.text();
 
@@ -315,22 +315,27 @@ async function handleWebhook(env, request) {
   const sessionId = event.data && event.data.object && event.data.object.id;
   if (!sessionId) return json({ ok: false, error: 'no_session_id' }, 400);
 
-  const result = await fulfill(env, sessionId, { sendMail: true });
+  if (ctx && typeof ctx.waitUntil === 'function') {
+    ctx.waitUntil(
+      fulfill(env, sessionId, { sendMail: true }).catch(() => { /* recorded in KV */ })
+    );
+    return json({ ok: true, status: 'accepted' });
+  }
 
+  const result = await fulfill(env, sessionId, { sendMail: true });
   if (!result.ok) {
     if (result.reason === 'stripe_unreachable') {
       return json({ ok: false, error: 'stripe_unreachable' }, 502);
     }
     return json({ ok: true, status: result.reason });
   }
-
   return json({ ok: true, status: 'fulfilled', email_sent: !!result.record.email_sent });
 }
 
 /* --------------------------------------------------------------- router --- */
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
 
@@ -342,7 +347,7 @@ export default {
     }
     if (path === '/webhook') {
       if (request.method !== 'POST') return json({ ok: false, error: 'method' }, 405);
-      return handleWebhook(env, request);
+      return handleWebhook(env, request, ctx);
     }
 
     if (env.ASSETS) return env.ASSETS.fetch(request);
