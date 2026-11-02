@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>worker.js signature verification — test harness</title>
+  <meta name="robots" content="noindex">
+  <style>
+    body { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px;
+           background: #12141a; color: #e6e6e6; padding: 2rem; line-height: 1.7; }
+    h1 { font-size: 15px; letter-spacing: .1em; text-transform: uppercase; color: #9aa0aa; }
+    .pass { color: #4ade80; }
+    .fail { color: #f87171; }
+    #summary { margin-top: 1.5rem; padding: .75rem 1rem; border: 1px solid #333; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>worker.js — webhook signature verification</h1>
+  <div id="out">running…</div>
+  <div id="summary"></div>
+
+<script type="module">
+const src = await (await fetch('./worker.js')).text();
+const stripped = src
+  .replace(/export\s+default\s*\{[\s\S]*?\n\};/, '')
+  .replace(/export\s*\{[^}]*\};?/g, '');
+const blob = new Blob([stripped + '\nself.__t = { verifyStripeSignature };'], { type: 'text/javascript' });
+const mod = await import(URL.createObjectURL(blob));
+const verify = mod.verifyStripeSignature || self.__t.verifyStripeSignature;
+
+async function hmacHex(secret, payload) {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey('raw', enc.encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  const sig = await crypto.subtle.sign('HMAC', key, enc.encode(payload));
+  return [...new Uint8Array(sig)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+const out = document.getElementById('out');
+let pass = 0, fail = 0;
+
+function report(name, actual, expected) {
+  const ok = actual === expected;
+  ok ? pass++ : fail++;
+  const row = document.createElement('div');
+  row.className = ok ? 'pass' : 'fail';
+  row.textContent = (ok ? 'PASS  ' : 'FAIL  ') + name +
+    (ok ? '' : '  (got ' + actual + ', expected ' + expected + ')');
+  out.appendChild(row);
+}
+
+report('HMAC-SHA256 known vector (RFC 4231 #2)',
+  await hmacHex('Jefe', 'what do ya want for nothing?'),
+  '5bdcc146bf60754e6a042426089575c75a003f089d2739839dec58b964ec3843');
+
+const SECRET = 'whsec_test_secret_abc123';
+const body = JSON.stringify({ id: 'evt_1', type: 'checkout.session.completed' });
+const now = Math.floor(Date.now() / 1000);
+const goodSig = await hmacHex(SECRET, now + '.' + body);
+
+report('valid signature accepted',
+  await verify(body, 't=' + now + ',v1=' + goodSig, SECRET), true);
+
+report('tampered body rejected',
+  await verify(body.replace('completed', 'completed '),
+    't=' + now + ',v1=' + goodSig, SECRET), false);
+
+report('wrong secret rejected',
+  await verify(body, 't=' + now + ',v1=' + goodSig, 'whsec_wrong'), false);
+
+report('replayed old timestamp rejected (>5 min)',
+  await verify(body, 't=' + (now - 400) + ',v1=' + await hmacHex(SECRET, (now - 400) + '.' + body), SECRET), false);
+
+report('missing signature header rejected',
+  await verify(body, null, SECRET), false);
+
+report('malformed header rejected',
+  await verify(body, 'garbage', SECRET), false);
+
+report('header without v1 rejected',
+  await verify(body, 't=' + now, SECRET), false);
+
+report('missing secret rejected',
+  await verify(body, 't=' + now + ',v1=' + goodSig, ''), false);
+
+report('multiple v1 values, one correct, accepted',
+  await verify(body, 't=' + now + ',v1=' + 'a'.repeat(64) + ',v1=' + goodSig, SECRET), true);
+
+report('truncated signature rejected',
+  await verify(body, 't=' + now + ',v1=' + goodSig.slice(0, 32), SECRET), false);
+
+const s = document.getElementById('summary');
+s.textContent = fail === 0
+  ? 'RESULT: ALL ' + pass + ' CHECKS PASSED'
+  : 'RESULT: ' + fail + ' FAILED, ' + pass + ' passed';
+s.className = fail === 0 ? 'pass' : 'fail';
+document.title = (fail === 0 ? 'PASS ' : 'FAIL ') + pass + '/' + (pass + fail);
+</script>
+</body>
+</html>
