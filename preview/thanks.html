@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order confirmed — Xevolution</title>
+  <meta name="description" content="Confirm your Xevolution order and get your download.">
+  <meta name="robots" content="noindex, nofollow">
+  <!--
+    Post-payment landing page for Stripe Payment Links.
+    Stripe redirects here as: /thanks.html?session_id={CHECKOUT_SESSION_ID}
+    This page NEVER trusts the session_id in the URL. It asks the Worker at
+    /api/session to verify the session with Stripe before it shows anything.
+  -->
+  <link rel="stylesheet" href="assets/site.css">
+  <link rel="stylesheet" href="assets/thanks.css">
+  <script>window.VAULT_MOCK = true;</script>
+</head>
+<body class="thanks">
+
+  <header class="thanks__bar">
+    <a class="thanks__mark" href="/">XEVOLUTION</a>
+    <a class="thanks__support" href="mailto:support@xevolution.biz">support@xevolution.biz</a>
+  </header>
+
+  <main class="thanks__main" id="main" data-state="verifying">
+    <p class="thanks__eyebrow" id="eyebrow">Order confirmation</p>
+    <h1 class="thanks__title" id="title">Checking your order</h1>
+    <p class="thanks__lede" id="lede">One moment while we confirm your payment with Stripe.</p>
+
+    <div class="thanks__panel" id="panel" aria-live="polite">
+      <p class="thanks__muted">Verifying…</p>
+    </div>
+
+    <!--
+      FOUNDER PROOF SLOT — Architect writes this.
+      Do not fill with an unverified claim. Uncomment and replace the text only
+      with a statement the Architect can stand behind.
+      <figure class="thanks__proof">
+        <blockquote>…</blockquote>
+        <figcaption>…</figcaption>
+      </figure>
+    -->
+
+    <noscript>
+      <div class="thanks__panel">
+        <p class="thanks__muted">
+          This page needs JavaScript to confirm your payment. Your download link has
+          also been emailed to the address you paid with. If it has not arrived,
+          email <a href="mailto:support@xevolution.biz">support@xevolution.biz</a>
+          with your receipt.
+        </p>
+      </div>
+    </noscript>
+
+    <p class="thanks__fine">
+      Trouble? Email <a href="mailto:support@xevolution.biz">support@xevolution.biz</a>
+      with the receipt from Stripe and we will sort it out.
+    </p>
+  </main>
+
+  <footer class="thanks__foot">
+    <a href="/terms.html">Terms</a>
+    <span aria-hidden="true">·</span>
+    <a href="/privacy.html">Privacy</a>
+    <span aria-hidden="true">·</span>
+    <span>Xevolution</span>
+  </footer>
+
+  <script src="assets/thanks.js"></script>
+</body>
+</html>
