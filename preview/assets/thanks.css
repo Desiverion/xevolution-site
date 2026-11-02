@@ -1,0 +1,247 @@
+/* thanks.css — post-payment page.
+ *
+ * TOKENS: every value below is a FALLBACK behind var(--token, fallback).
+ * site.css is loaded first, so if the storefront defines the same custom
+ * properties, the storefront wins and this file adapts automatically.
+ * If the storefront uses different token names, change ONLY the var() names
+ * in the "Token bridge" block — not the fallback values.
+ */
+
+/* --- Token bridge ------------------------------------------------------- */
+.thanks {
+  --t-ink:       var(--ink,        #12141a);
+  --t-ink-soft:  var(--ink-soft,   #4a4f5a);
+  --t-ink-faint: var(--ink-faint,  #7b818c);
+  --t-paper:     var(--paper,      #faf8f4);
+  --t-card:      var(--paper-2,    #ffffff);
+  --t-accent:    var(--accent,     #e4572e);
+  --t-accent-ink:var(--accent-ink, #ffffff);
+  --t-line:      var(--line,       #e3e0d8);
+  --t-ok:        var(--ok,         #1f7a4d);
+  --t-warn:      var(--warn,       #a8661a);
+  --t-bad:       var(--bad,        #a3242b);
+  --t-radius:    var(--radius,     10px);
+  --t-max:       var(--max-w,      44rem);
+  --t-sans:      var(--font-sans,  system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif);
+  --t-mono:      var(--font-mono,  ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+}
+
+/* --- Page --------------------------------------------------------------- */
+.thanks {
+  margin: 0;
+  background: var(--t-paper);
+  color: var(--t-ink);
+  font-family: var(--t-sans);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.thanks__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: var(--t-max);
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem;
+  border-bottom: 1px solid var(--t-line);
+}
+
+.thanks__mark {
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  font-size: 0.82rem;
+  color: var(--t-ink);
+  text-decoration: none;
+}
+
+.thanks__support {
+  font-size: 0.82rem;
+  color: var(--t-ink-faint);
+  text-decoration: none;
+}
+
+.thanks__support:hover,
+.thanks__fine a:hover {
+  color: var(--t-accent);
+}
+
+.thanks__main {
+  max-width: var(--t-max);
+  margin: 0 auto;
+  padding: 3.5rem 1.25rem 2rem;
+}
+
+.thanks__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--t-ink-faint);
+}
+
+.thanks__title {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.9rem, 5vw, 2.7rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+.thanks__lede {
+  margin: 0 0 2rem;
+  font-size: 1.05rem;
+  color: var(--t-ink-soft);
+  max-width: 34rem;
+}
+
+/* --- Panel -------------------------------------------------------------- */
+.thanks__panel {
+  background: var(--t-card);
+  border: 1px solid var(--t-line);
+  border-radius: var(--t-radius);
+  padding: 1.5rem;
+}
+
+.thanks__muted {
+  margin: 0;
+  color: var(--t-ink-soft);
+}
+
+.thanks__muted a {
+  color: var(--t-accent);
+}
+
+.thanks__label {
+  margin: 0 0 0.25rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--t-ink-faint);
+}
+
+.thanks__order {
+  margin: 1.25rem 0 0;
+  font-family: var(--t-mono);
+  font-size: 0.8rem;
+  color: var(--t-ink-faint);
+  word-break: break-all;
+}
+
+.thanks__btn {
+  display: inline-block;
+  padding: 0.85rem 1.4rem;
+  background: var(--t-accent);
+  color: var(--t-accent-ink);
+  border: 0;
+  border-radius: var(--t-radius);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.08s ease, filter 0.15s ease;
+}
+
+.thanks__btn:hover { filter: brightness(0.94); }
+.thanks__btn:active { transform: translateY(1px); }
+
+.thanks__btn--ghost {
+  background: transparent;
+  color: var(--t-ink);
+  border: 1px solid var(--t-line);
+  font-weight: 500;
+}
+
+.thanks__note {
+  margin: 1rem 0 0;
+  font-size: 0.88rem;
+  color: var(--t-ink-faint);
+}
+
+.thanks__badge {
+  display: inline-block;
+  margin: 0 0 1rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.thanks__badge--ok   { background: #e8f4ed; color: var(--t-ok); }
+.thanks__badge--warn { background: #fbf1e2; color: var(--t-warn); }
+.thanks__badge--bad  { background: #fbeaea; color: var(--t-bad); }
+
+/* --- Proof slot (Architect-authored only) ------------------------------- */
+.thanks__proof {
+  margin: 2rem 0 0;
+  padding: 1.25rem 1.5rem;
+  border-left: 3px solid var(--t-accent);
+  background: var(--t-card);
+}
+
+.thanks__proof blockquote {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: var(--t-ink);
+}
+
+.thanks__proof figcaption {
+  font-size: 0.82rem;
+  color: var(--t-ink-faint);
+}
+
+/* --- Fine print / footer ------------------------------------------------ */
+.thanks__fine {
+  margin: 2rem 0 0;
+  font-size: 0.85rem;
+  color: var(--t-ink-faint);
+}
+
+.thanks__fine a { color: var(--t-ink-soft); }
+
+.thanks__foot {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  max-width: var(--t-max);
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+  border-top: 1px solid var(--t-line);
+  font-size: 0.8rem;
+  color: var(--t-ink-faint);
+}
+
+.thanks__foot a {
+  color: var(--t-ink-faint);
+  text-decoration: none;
+}
+
+.thanks__foot a:hover { color: var(--t-accent); }
+
+/* --- Spinner (verifying state only) ------------------------------------- */
+.thanks__spin {
+  display: inline-block;
+  width: 0.9rem;
+  height: 0.9rem;
+  margin-right: 0.5rem;
+  vertical-align: -0.1rem;
+  border: 2px solid var(--t-line);
+  border-top-color: var(--t-accent);
+  border-radius: 50%;
+  animation: thanks-spin 0.7s linear infinite;
+}
+
+@keyframes thanks-spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .thanks__spin { animation: none; }
+  .thanks__btn { transition: none; }
+}
+
+@media (max-width: 480px) {
+  .thanks__main { padding-top: 2.5rem; }
+  .thanks__panel { padding: 1.15rem; }
+}
