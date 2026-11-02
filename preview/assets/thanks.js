@@ -1,18 +1,9 @@
 /* thanks.js — verifies a Stripe Checkout Session before revealing anything.
- *
- * CONTRACT WITH THE SERVER (see offers/497-vault/launch/worker.js):
- *   GET /api/session?session_id=cs_...
- *   -> 200 {"ok":true,"status":"paid","email":"a@b.c","product":"...",
- *           "order":"cs_...","download_url":"https://...","expires_at":1234567890,
- *           "already_delivered":false}
- *   -> 200 {"ok":true,"status":"pending"}            (not paid yet / processing)
- *   -> 200 {"ok":true,"status":"delivered_before"}   (token already used)
- *   -> 400 {"ok":false,"error":"missing_session"}
- *   -> 404 {"ok":false,"error":"unknown_session"}
- *   -> 502 {"ok":false,"error":"stripe_unreachable"}
+ * PREVIEW COPY (mock mode enabled in preview/thanks.html).
+ * Contract: GET /api/session?session_id=cs_... -> see DELIVERY-WIRING.md
  *
  * The session_id in the URL is NEVER trusted. The browser only learns a
- * download URL if the server confirmed payment_status === 'paid' against Stripe.
+ * download URL if the server confirmed payment_status === 'paid' with Stripe.
  */
 (function () {
   'use strict';
@@ -48,8 +39,6 @@
       'Email <a href="mailto:support@xevolution.biz">support@xevolution.biz</a> ' +
       'with your Stripe receipt and we will send your files by hand.</p>';
   }
-
-  /* ---------- renderers ---------- */
 
   function renderVerifying() {
     setState('verifying', 'Checking your order',
@@ -91,7 +80,7 @@
             'Email <a href="mailto:support@xevolution.biz">support@xevolution.biz</a> ' +
             'with your receipt and we will send your files by hand.</p>';
 
-    html += '<p class="thanks__order">Order ' + esc(d.order || '') + '</p>';
+    html += '<p class="thanks__order">Order ID <span>' + esc(d.order || '') + '</span></p>';
     panel(html);
   }
 
@@ -151,8 +140,6 @@
     );
   }
 
-  /* ---------- mock (local verification only) ---------- */
-
   function mockResult(sid) {
     if (!sid) return { status: 400, body: { ok: false, error: 'missing_session' } };
     if (/^cs_mock_paid/.test(sid)) {
@@ -170,8 +157,6 @@
     if (/^cs_mock_500/.test(sid))       return { status: 502, body: { ok: false, error: 'stripe_unreachable' } };
     return { status: 404, body: { ok: false, error: 'unknown_session' } };
   }
-
-  /* ---------- boot ---------- */
 
   function sessionIdFromUrl() {
     try {
